@@ -57,12 +57,11 @@ class Bot(commands.Bot):
         commands = {
             "points": self.get_points,
             "addpoints": self.add_points,
-            "givepoints": self.give_points,
+            "give": self.give_points,
             "addcommand": self.add_command,
             "removecommand": self.remove_command,
             "commands": self.list_commands,
         }
-        print(args)
 
         command = args[0]
         if command in commands:

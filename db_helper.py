@@ -48,7 +48,7 @@ def remove_points(username, points):
         add_user(username)
     actual_points = get_points(username) - points
     if actual_points < 0:
-        return -1
+        return False
     query = f"""UPDATE users set points = {actual_points} where username = "{username}";"""
     db_funcs.execute(query)
     return True
