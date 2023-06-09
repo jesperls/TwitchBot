@@ -1,20 +1,21 @@
 import os
 from twitchio.channel import Channel
+from twitchio.user import User
 from twitchio.ext import commands
-import db_helper
+import asyncio
+import db_helper as db_helper
+import api_helper as api_helper
 import time
 import threading
-import asyncio
-import requests
 
-from twitchio.user import User
 
-async def point_timer():
+def point_timer():
     while True:
-        await asyncio.sleep(5)
+        time.sleep(60)
+        if not api_helper.is_live():
+            print("Not live")
+            continue
         users = db_helper.get_online_users()
-        info = await bot.fetch_channel(os.environ['CHANNEL'], os.environ['ACCESS_TOKEN'])
-        print(info.title, info.delay)
         for user in users:
             db_helper.add_points(user[0], 100)
 
@@ -29,8 +30,8 @@ class Bot(commands.Bot):
         print(f'User id is | {self.user_id}')
         db_helper.reset_online_status()
         # task = asyncio.Task(point_timer())
-        # t = threading.Thread(target=point_timer, daemon=True, args=[])
-        # t.start()
+        t = threading.Thread(target=point_timer, daemon=True, args=[])
+        t.start()
     
     async def event_message(self, message):
         if message.echo:
