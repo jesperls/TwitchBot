@@ -5,3 +5,8 @@ CREATE TABLE IF NOT EXISTS users (
     online_status boolean default 0,
     unique (username)
 );
+CREATE TABLE IF NOT EXISTS commands (
+    command varchar(64) default null,
+    response TEXT default null,
+    unique (command)
+);

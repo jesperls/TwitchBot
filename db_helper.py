@@ -51,6 +51,7 @@ def remove_points(username, points):
         return -1
     query = f"""UPDATE users set points = {actual_points} where username = "{username}";"""
     db_funcs.execute(query)
+    return True
 
 def set_points(username, points):
     if not user_exists(username):
@@ -72,6 +73,28 @@ def get_users():
 
 def reset_online_status():
     query = """UPDATE users set online_status = 0;"""
+    db_funcs.execute(query)
+
+def add_command(command, response):
+    query = f"""insert into commands (command, response) values("{command}", "{response}");"""
+    db_funcs.execute(query)
+
+def list_commands():
+    query = """select command from commands;"""
+    ret = db_funcs.execute(query, True)
+    # turn it into a list of strings
+    ret = [x[0] for x in ret]
+    return ret
+
+def get_command(command):
+    query = f"""select response from commands where command="{command}";"""
+    ret = db_funcs.execute(query, True)
+    if ret:
+        return ret[0][0]
+    return ret
+
+def remove_command(command):
+    query = f"""delete from commands where command="{command}";"""
     db_funcs.execute(query)
 
 def reset():

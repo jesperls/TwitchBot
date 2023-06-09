@@ -18,3 +18,6 @@ def is_live():
     if len(stream_data['data']) == 1:
         return True
     return False
+
+if __name__ == "__main__":
+    print(is_live())
