@@ -1,14 +1,26 @@
 import db_functions as db_funcs
+import os
+
+def set_last_message(username, message):
+    query = f"""UPDATE users set last_message = "{message}" where username = "{username}";"""
+    db_funcs.execute(query)
+
+def get_last_message(username):
+    query = f"""select last_message from users where username="{username}";"""
+    res = db_funcs.execute(query, True)
+    if res:
+        return res[0][0]
+    return res
 
 def get_status(username):
-    query = f"""select online_status from users where username="{username}"; """
+    query = f"""select online_status from users where username="{username}";"""
     res = db_funcs.execute(query, True)
     if res:
         return res[0][0]
     return -1
 
 def user_exists(username):
-    query = f"""select username from users where username="{username}"; """
+    query = f"""select username from users where username="{username}";"""
     res = db_funcs.execute(query, True)
     if res:
         return True
@@ -41,7 +53,6 @@ def add_points(username, points):
     actual_points = get_points(username) + points
     query = f"""UPDATE users set points = {actual_points} where username = "{username}";"""
     db_funcs.execute(query)
-
 
 def remove_points(username, points):
     if not user_exists(username):
@@ -82,7 +93,6 @@ def add_command(command, response):
 def list_commands():
     query = """select command from commands;"""
     ret = db_funcs.execute(query, True)
-    # turn it into a list of strings
     ret = [x[0] for x in ret]
     return ret
 
@@ -97,9 +107,22 @@ def remove_command(command):
     query = f"""delete from commands where command="{command}";"""
     db_funcs.execute(query)
 
+def get_watchtime(username):
+    if not user_exists(username):
+        add_user(username)
+    query = f"""select watchtime from users where username="{username}"; """
+    res = db_funcs.execute(query, True)
+    return res[0][0]
+
+def add_watchtime(username, time):
+    if not user_exists(username):
+        add_user(username)
+    actual_watchtime = get_watchtime(username) + time
+    query = f"""UPDATE users set watchtime = {actual_watchtime} where username = "{username}";"""
+    db_funcs.execute(query)
+
 def reset():
     db_funcs.create()
 
 if __name__ == "__main__":
-    reset()
     print(get_users())

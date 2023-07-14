@@ -1,26 +1,24 @@
-import sqlite3
-import os
+import pymysql
+
+def get_connection():
+    connection = pymysql.connect(host='localhost', user='drift', password='', db='drift')
+    return connection
 
 def create():
-    if os.path.exists("drift.db"):
-        os.remove("drift.db")
     with open("Database/database.sql", "r") as sql_file:
-        sql_script = sql_file.read()
-        con = sqlite3.connect("drift.db")
-        cur = con.cursor()
-        cur.executescript(sql_script)
-        con.commit()
-        con.close()
+        ret = sql_file.read().split(';')
+        ret.pop()
+        for query in ret:
+            execute(query+";")
 
 def execute(query, fetch = False):
-    try:
-        con = sqlite3.connect("drift.db")
-        cur = con.cursor()
-        res = cur.execute(query)
-        res = res.fetchall()
-        con.commit()
-        con.close()
-        if fetch:
-            return res
-    except sqlite3.IntegrityError:
-        return -1
+    con = get_connection()
+    cur = con.cursor()
+    cur.execute(query)
+    res = cur.fetchall()
+    con.commit()
+    con.close()
+    return res
+
+if __name__ == "__main__":
+    create()
