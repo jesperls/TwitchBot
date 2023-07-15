@@ -1,3 +1,4 @@
 drift.db
 __pycache__
 .vscode
+node_modules

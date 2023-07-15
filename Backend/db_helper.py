@@ -1,5 +1,6 @@
 import db_functions as db_funcs
 import os
+import json
 
 def set_last_message(username, message):
     query = f"""UPDATE users set last_message = "{message}" where username = "{username}";"""
@@ -102,6 +103,20 @@ def get_command(command):
     if ret:
         return ret[0][0]
     return ret
+
+def get_commands_json():
+    query = """select * from commands;"""
+    ret = db_funcs.execute(query, True)
+
+    commands = []
+    for row in ret:
+        command = {"command": row[0], "response": row[1]}
+        commands.append(command)
+
+    data = {"commands": commands}
+    json_data = json.dumps(data, indent=4)
+    
+    return json_data
 
 def remove_command(command):
     query = f"""delete from commands where command="{command}";"""
