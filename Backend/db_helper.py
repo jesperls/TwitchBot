@@ -1,5 +1,4 @@
 import db_functions as db_funcs
-import os
 import json
 
 def set_last_message(username, message):
@@ -8,21 +7,21 @@ def set_last_message(username, message):
 
 def get_last_message(username):
     query = f"""select last_message from users where username="{username}";"""
-    res = db_funcs.execute(query, True)
+    res = db_funcs.execute(query)
     if res:
         return res[0][0]
     return res
 
 def get_status(username):
     query = f"""select online_status from users where username="{username}";"""
-    res = db_funcs.execute(query, True)
+    res = db_funcs.execute(query)
     if res:
         return res[0][0]
     return -1
 
 def user_exists(username):
     query = f"""select username from users where username="{username}";"""
-    res = db_funcs.execute(query, True)
+    res = db_funcs.execute(query)
     if res:
         return True
     return False
@@ -45,7 +44,7 @@ def get_points(username):
     if not user_exists(username):
         add_user(username)
     query = f"""select points from users where username="{username}"; """
-    res = db_funcs.execute(query, True)
+    res = db_funcs.execute(query)
     return res[0][0]
 
 def add_points(username, points):
@@ -75,12 +74,12 @@ def set_points(username, points):
 
 def get_online_users():
     query = """SELECT * from users where online_status = 1;"""
-    ret = db_funcs.execute(query, True)
+    ret = db_funcs.execute(query)
     return ret
 
 def get_users():
     query = """SELECT * from users;"""
-    ret = db_funcs.execute(query, True)
+    ret = db_funcs.execute(query)
     return ret
 
 def reset_online_status():
@@ -93,20 +92,20 @@ def add_command(command, response):
 
 def list_commands():
     query = """select command from commands;"""
-    ret = db_funcs.execute(query, True)
-    ret = [x[0] for x in ret]
+    ret = db_funcs.execute(query)
+    ret = [x[0].lower() for x in ret]
     return ret
 
 def get_command(command):
     query = f"""select response from commands where command="{command}";"""
-    ret = db_funcs.execute(query, True)
+    ret = db_funcs.execute(query)
     if ret:
         return ret[0][0]
     return ret
 
 def get_commands_json():
     query = """select * from commands;"""
-    ret = db_funcs.execute(query, True)
+    ret = db_funcs.execute(query)
 
     commands = []
     for row in ret:
@@ -126,7 +125,7 @@ def get_watchtime(username):
     if not user_exists(username):
         add_user(username)
     query = f"""select watchtime from users where username="{username}"; """
-    res = db_funcs.execute(query, True)
+    res = db_funcs.execute(query)
     return res[0][0]
 
 def add_watchtime(username, time):

@@ -11,7 +11,7 @@ def create():
         for query in ret:
             execute(query+";")
 
-def execute(query, fetch = False):
+def execute(query):
     con = get_connection()
     cur = con.cursor()
     cur.execute(query)
