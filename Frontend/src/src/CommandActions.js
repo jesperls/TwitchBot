@@ -1,4 +1,4 @@
-import { addCommand, removeCommand } from './api';
+import { addCommand, removeCommand } from './Api';
 
 export const handleAddCommand = (command, response, setCommands) => {
   const newCommandObj = { command, response };

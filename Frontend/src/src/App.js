@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import CommandList from './CommandList';
 import CommandForm from './CommandForm';
-import { getCommands } from './api';
+import { getCommands } from './Api';
 
 function App() {
   const [commands, setCommands] = useState([]);
